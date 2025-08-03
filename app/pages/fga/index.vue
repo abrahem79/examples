@@ -71,6 +71,27 @@
       </div>
     </div>
 
+    <div class="advanced-tools">
+      <h4>Advanced FGA Tools</h4>
+      
+      <div class="tools-tabs">
+        <button 
+          v-for="tool in tools" 
+          :key="tool.id"
+          @click="activeTool = tool.id"
+          class="tool-tab"
+          :class="{ active: activeTool === tool.id }"
+        >
+          {{ tool.label }}
+        </button>
+      </div>
+      
+      <div class="tool-content">
+        <FgaPermissionMatrix v-if="activeTool === 'matrix'" />
+        <FgaRoleManager v-if="activeTool === 'roles'" />
+      </div>
+    </div>
+
     <div class="use-cases-nav">
       <h4>Explore Use Cases</h4>
       <div class="nav-grid">
@@ -103,6 +124,13 @@ const { currentUser, getUsers, setCurrentUser } = useFGA()
 
 const users = getUsers()
 const selectedUserId = ref(currentUser.value.id)
+
+const activeTool = ref('matrix')
+
+const tools = [
+  { id: 'matrix', label: 'Permission Matrix' },
+  { id: 'roles', label: 'Role Manager' }
+]
 
 const switchUser = () => {
   const user = users.find(u => u.id === selectedUserId.value)
@@ -220,6 +248,43 @@ const switchUser = () => {
 }
 
 .api-section {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.advanced-tools {
+  margin-bottom: 2rem;
+}
+
+.tools-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tool-tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tool-tab:hover {
+  color: #374151;
+}
+
+.tool-tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.tool-content {
   background: white;
   border-radius: 8px;
   overflow: hidden;
