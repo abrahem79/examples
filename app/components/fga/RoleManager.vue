@@ -188,8 +188,8 @@
         <div class="audit-filters">
           <select v-model="auditFilter">
             <option value="all">All Events</option>
-            <option value="granted">Access Granted</option>
-            <option value="denied">Access Denied</option>
+            <option value="access_granted">Access Granted</option>
+            <option value="access_denied">Access Denied</option>
             <option value="role_change">Role Changes</option>
           </select>
         </div>
@@ -358,7 +358,7 @@ const resourcesWithMultipleOwners = computed(() => {
 
 const crossDepartmentAccess = computed(() => {
   // Simplified calculation - in real implementation would check actual department boundaries
-  return Math.floor(Math.random() * 5) + 3
+  return 5
 })
 
 const filteredAuditEvents = computed(() => {

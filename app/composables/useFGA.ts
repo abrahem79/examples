@@ -76,7 +76,7 @@ const mockRoles: FGARole[] = [
 
 export const useFGA = () => {
   // Current user state (for demo purposes)
-  const currentUser = ref<FGAUser>(mockUsers[0])
+  const currentUser = useState<FGAUser>('fga-current-user', () => mockUsers[0])
 
   // Check API - Fast access checks
   const check = async (request: FGACheckRequest): Promise<FGACheckResponse> => {
