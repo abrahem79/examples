@@ -10,6 +10,16 @@ export const useFGACheck = () => {
 
   // Perform an authorization check
   const performCheck = async (request: FGACheckRequest) => {
+    if (!request || !request.user || !request.relation || !request.resource) {
+      const result: FGACheckResponse = {
+        allowed: false,
+        reason: 'Invalid check request: user, relation, and resource are required',
+        timestamp: new Date().toISOString(),
+      }
+      lastCheck.value = result
+      return result
+    }
+
     isLoading.value = true
     error.value = null
     
@@ -27,19 +37,19 @@ export const useFGACheck = () => {
 
   // Quick helper for common checks
   const canEdit = (user: string, resource: string) => {
-    return performCheck({ user, relation: 'editor', resource })
+    return performCheck({ user: user ?? '', relation: 'editor', resource: resource ?? '' })
   }
 
   const canView = (user: string, resource: string) => {
-    return performCheck({ user, relation: 'viewer', resource })
+    return performCheck({ user: user ?? '', relation: 'viewer', resource: resource ?? '' })
   }
 
   const isOwner = (user: string, resource: string) => {
-    return performCheck({ user, relation: 'owner', resource })
+    return performCheck({ user: user ?? '', relation: 'owner', resource: resource ?? '' })
   }
 
   const isAdmin = (user: string, resource: string) => {
-    return performCheck({ user, relation: 'admin', resource })
+    return performCheck({ user: user ?? '', relation: 'admin', resource: resource ?? '' })
   }
 
   // Clear state

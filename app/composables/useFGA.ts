@@ -80,6 +80,14 @@ export const useFGA = () => {
 
   // Check API - Fast access checks
   const check = async (request: FGACheckRequest): Promise<FGACheckResponse> => {
+    if (!request || !request.user || !request.relation || !request.resource) {
+      return {
+        allowed: false,
+        reason: 'Invalid check request: user, relation, and resource are required',
+        timestamp: new Date().toISOString(),
+      }
+    }
+
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 100))
     
@@ -100,6 +108,14 @@ export const useFGA = () => {
 
   // Query API - Find resources user has access to
   const query = async (request: FGAQueryRequest): Promise<FGAQueryResponse> => {
+    if (!request || !request.user || !request.relation) {
+      return {
+        resources: [],
+        total: 0,
+        timestamp: new Date().toISOString(),
+      }
+    }
+
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 150))
     
@@ -125,6 +141,10 @@ export const useFGA = () => {
 
   // Helper function to check if current user can perform action on resource
   const canUserPerformAction = async (action: string, resourceId: string): Promise<boolean> => {
+    if (!action || !resourceId) {
+      return false
+    }
+
     const response = await check({
       user: currentUser.value.id,
       relation: action,
@@ -144,11 +164,17 @@ export const useFGA = () => {
 
   // Get relations for a user (for demo purposes)
   const getUserRelations = (userId: string) => {
+    if (!userId) {
+      return []
+    }
     return mockRelations.filter(r => r.user === userId)
   }
 
   // Switch current user (for demo purposes)
   const setCurrentUser = (user: FGAUser) => {
+    if (!user || !user.id) {
+      return
+    }
     currentUser.value = user
   }
 
